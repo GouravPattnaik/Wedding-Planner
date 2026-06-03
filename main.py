@@ -1,6 +1,8 @@
-def main():
-    print("Hello from wedding-planner-local!")
+"""
+Wedding Planner V1 - Entry point to run the FastAPI server.
+"""
 
+import uvicorn
 
 if __name__ == "__main__":
-    main()
+    uvicorn.run("backend.app.main:app", host="0.0.0.0", port=8000, reload=True)
