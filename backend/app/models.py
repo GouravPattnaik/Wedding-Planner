@@ -30,11 +30,21 @@ class Event(Base):
     id = Column(Integer, primary_key=True, index=True)
     wedding_id = Column(Integer, ForeignKey("weddings.id"), nullable=False)
     name = Column(String(255), nullable=False)  # e.g., "Engagement", "Wedding", "Reception"
+    event_date = Column(Date, nullable=True)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
     wedding = relationship("Wedding", back_populates="events")
     guests = relationship("Guest", back_populates="event", cascade="all, delete-orphan")
     expenses = relationship("Expense", back_populates="event", cascade="all, delete-orphan")
+
+
+class Update(Base):
+    __tablename__ = "updates"
+
+    id = Column(Integer, primary_key=True, index=True)
+    content = Column(Text, nullable=False)
+    date = Column(Date, nullable=False)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
 
 class Guest(Base):

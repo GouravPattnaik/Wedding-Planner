@@ -19,6 +19,11 @@ FastAPI
 SQLAlchemy
 SQLite (initially)
 uv
+Frontend
+React (Vite)
+Chart.js
+Tailwind/CSS
+
 Future
 PostgreSQL
 Docker
@@ -59,7 +64,11 @@ guests
 ------
 id
 event_id
-name
+family_name
+total_members
+attending_members
+rsvp_status
+is_coming
 phone
 email
 created_at
@@ -81,6 +90,10 @@ id
 event_id
 title
 amount
+tag
+is_fully_paid
+amount_remaining
+payment_date
 note
 attachment_path
 created_at
@@ -127,7 +140,11 @@ Returns:
 {
   "event_name": "Wedding",
   "guest_count": 120,
-  "expense_total": 185000
+  "expense_total": 185000,
+  "expenses_by_tag": {
+    "Food": 100000,
+    "Decor": 85000
+  }
 }
 Flutter Screens (V1)
 Home Screen
@@ -194,4 +211,9 @@ Build a working backend with:
 ✅ Event Summary
 ✅ Swagger API testing
 
-Once this works in Swagger (/docs), connect a Flutter app to it.
+V2 Milestone (Implemented)
+
+✅ Web UI (React + Vite)
+✅ Expense Tags & Pie Chart
+✅ Payment Tracking (is_fully_paid, amount_remaining, payment_date)
+✅ Family Guest Tracking (total_members, attending_members, rsvp_status, is_coming)

@@ -6,7 +6,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from backend.app.db import init_db
-from backend.app.routers import weddings, guests, expenses, summary
+from backend.app.routers import weddings, guests, expenses, summary, updates
 
 app = FastAPI(
     title="Wedding Planner API",
@@ -28,6 +28,7 @@ app.include_router(weddings.router, tags=["Weddings & Events"])
 app.include_router(guests.router, tags=["Guests"])
 app.include_router(expenses.router, tags=["Expenses"])
 app.include_router(summary.router, tags=["Summary"])
+app.include_router(updates.router, tags=["Updates"])
 
 
 @app.on_event("startup")

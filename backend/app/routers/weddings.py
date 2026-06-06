@@ -63,3 +63,19 @@ def create_event(data: EventCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(event)
     return event
+
+
+@router.put("/events/{event_id}", response_model=EventResponse)
+def update_event(event_id: int, data: __import__('backend.app.schemas', fromlist=['EventUpdate']).EventUpdate, db: Session = Depends(get_db)):
+    event = db.query(Event).filter(Event.id == event_id).first()
+    if not event:
+        raise HTTPException(status_code=404, detail="Event not found")
+    
+    if data.name is not None:
+        event.name = data.name
+    if data.event_date is not None:
+        event.event_date = data.event_date
+        
+    db.commit()
+    db.refresh(event)
+    return event

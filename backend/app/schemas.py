@@ -28,10 +28,16 @@ class WeddingResponse(WeddingBase):
 class EventBase(BaseModel):
     wedding_id: int
     name: str
+    event_date: Optional[date] = None
 
 
 class EventCreate(EventBase):
     pass
+
+
+class EventUpdate(BaseModel):
+    name: Optional[str] = None
+    event_date: Optional[date] = None
 
 
 class EventResponse(EventBase):
@@ -121,3 +127,20 @@ class EventSummary(BaseModel):
     guest_count: int
     expense_total: float
     expenses_by_tag: dict[str, float] = {}
+
+# ---------- Update ----------
+class UpdateBase(BaseModel):
+    content: str
+    date: date
+
+
+class UpdateCreate(UpdateBase):
+    pass
+
+
+class UpdateResponse(UpdateBase):
+    id: int
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
