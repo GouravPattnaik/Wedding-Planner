@@ -9,7 +9,7 @@ Models:
 """
 
 import datetime
-from sqlalchemy import Column, Integer, String, Float, Text, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, Float, Text, DateTime, ForeignKey, Boolean, Date
 from sqlalchemy.orm import relationship
 from backend.app.db import Base
 
@@ -42,7 +42,11 @@ class Guest(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     event_id = Column(Integer, ForeignKey("events.id"), nullable=False)
-    name = Column(String(255), nullable=False)
+    family_name = Column(String(255), nullable=False)
+    total_members = Column(Integer, default=1)
+    attending_members = Column(Integer, default=1)
+    rsvp_status = Column(Boolean, default=False)
+    is_coming = Column(Boolean, default=False)
     phone = Column(String(50), nullable=True)
     email = Column(String(255), nullable=True)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
@@ -57,6 +61,10 @@ class Expense(Base):
     event_id = Column(Integer, ForeignKey("events.id"), nullable=False)
     title = Column(String(255), nullable=False)
     amount = Column(Float, nullable=False)
+    tag = Column(String(50), nullable=True)
+    is_fully_paid = Column(Boolean, default=False)
+    amount_remaining = Column(Float, nullable=True)
+    payment_date = Column(Date, nullable=True)
     note = Column(Text, nullable=True)
     attachment_path = Column(String(512), nullable=True)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)

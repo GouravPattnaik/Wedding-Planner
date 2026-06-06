@@ -8,6 +8,7 @@ from pathlib import Path
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
 from sqlalchemy.orm import Session
 from typing import List, Optional
+from datetime import date
 
 from backend.app.db import get_db
 from backend.app.models import Event, Expense
@@ -33,6 +34,10 @@ async def create_expense(
     event_id: int,
     title: str = Form(...),
     amount: float = Form(...),
+    tag: Optional[str] = Form(None),
+    is_fully_paid: bool = Form(False),
+    amount_remaining: Optional[float] = Form(None),
+    payment_date: Optional[date] = Form(None),
     note: Optional[str] = Form(None),
     attachment: Optional[UploadFile] = File(None),
     db: Session = Depends(get_db),
@@ -56,6 +61,10 @@ async def create_expense(
         event_id=event_id,
         title=title,
         amount=amount,
+        tag=tag,
+        is_fully_paid=is_fully_paid,
+        amount_remaining=amount_remaining,
+        payment_date=payment_date,
         note=note,
         attachment_path=attachment_path,
     )
@@ -74,6 +83,14 @@ def update_expense(expense_id: int, data: ExpenseUpdate, db: Session = Depends(g
         expense.title = data.title
     if data.amount is not None:
         expense.amount = data.amount
+    if data.tag is not None:
+        expense.tag = data.tag
+    if data.is_fully_paid is not None:
+        expense.is_fully_paid = data.is_fully_paid
+    if data.amount_remaining is not None:
+        expense.amount_remaining = data.amount_remaining
+    if data.payment_date is not None:
+        expense.payment_date = data.payment_date
     if data.note is not None:
         expense.note = data.note
     db.commit()

@@ -20,11 +20,20 @@ def get_event_summary(event_id: int, db: Session = Depends(get_db)):
     if not event:
         raise HTTPException(status_code=404, detail="Event not found")
 
-    guest_count = db.query(func.count(Guest.id)).filter(Guest.event_id == event_id).scalar() or 0
+    guest_count = db.query(func.sum(Guest.total_members)).filter(Guest.event_id == event_id).scalar() or 0
     expense_total = db.query(func.coalesce(func.sum(Expense.amount), 0)).filter(Expense.event_id == event_id).scalar() or 0.0
+
+    # Aggregate by tag
+    expenses_by_tag_query = db.query(
+        func.coalesce(Expense.tag, 'Untagged').label('tag'),
+        func.sum(Expense.amount).label('total')
+    ).filter(Expense.event_id == event_id).group_by(func.coalesce(Expense.tag, 'Untagged')).all()
+    
+    expenses_by_tag = {row.tag: float(row.total) for row in expenses_by_tag_query}
 
     return EventSummary(
         event_name=event.name,
         guest_count=guest_count,
         expense_total=float(expense_total),
+        expenses_by_tag=expenses_by_tag
     )

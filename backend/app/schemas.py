@@ -2,7 +2,7 @@
 Pydantic schemas for request/response validation.
 """
 
-from datetime import datetime
+from datetime import datetime, date
 from typing import Optional
 from pydantic import BaseModel
 
@@ -48,7 +48,11 @@ class EventWithWedding(EventResponse):
 
 # ---------- Guest ----------
 class GuestBase(BaseModel):
-    name: str
+    family_name: str
+    total_members: int = 1
+    attending_members: int = 1
+    rsvp_status: bool = False
+    is_coming: bool = False
     phone: Optional[str] = None
     email: Optional[str] = None
 
@@ -58,7 +62,11 @@ class GuestCreate(GuestBase):
 
 
 class GuestUpdate(BaseModel):
-    name: Optional[str] = None
+    family_name: Optional[str] = None
+    total_members: Optional[int] = None
+    attending_members: Optional[int] = None
+    rsvp_status: Optional[bool] = None
+    is_coming: Optional[bool] = None
     phone: Optional[str] = None
     email: Optional[str] = None
 
@@ -76,6 +84,10 @@ class GuestResponse(GuestBase):
 class ExpenseBase(BaseModel):
     title: str
     amount: float
+    tag: Optional[str] = None
+    is_fully_paid: bool = False
+    amount_remaining: Optional[float] = None
+    payment_date: Optional[date] = None
     note: Optional[str] = None
 
 
@@ -86,6 +98,10 @@ class ExpenseCreate(ExpenseBase):
 class ExpenseUpdate(BaseModel):
     title: Optional[str] = None
     amount: Optional[float] = None
+    tag: Optional[str] = None
+    is_fully_paid: Optional[bool] = None
+    amount_remaining: Optional[float] = None
+    payment_date: Optional[date] = None
     note: Optional[str] = None
 
 
@@ -104,3 +120,4 @@ class EventSummary(BaseModel):
     event_name: str
     guest_count: int
     expense_total: float
+    expenses_by_tag: dict[str, float] = {}
